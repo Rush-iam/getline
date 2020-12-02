@@ -1,16 +1,16 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   get_next_line.c                                    :+:      :+:    :+:   */
+/*   get_next_line_bonus.c                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: ngragas <ngragas@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2020/11/30 16:59:26 by ngragas           #+#    #+#             */
-/*   Updated: 2020/12/02 19:45:40 by ngragas          ###   ########.fr       */
+/*   Created: 2020/12/02 20:34:29 by ngragas           #+#    #+#             */
+/*   Updated: 2020/12/02 20:34:29 by ngragas          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "get_next_line.h"
+#include "get_next_line_bonus.h"
 
 int	get_next_line(int fd, char **line)
 {
