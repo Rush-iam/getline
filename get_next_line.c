@@ -6,7 +6,7 @@
 /*   By: ngragas <ngragas@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/30 16:59:26 by ngragas           #+#    #+#             */
-/*   Updated: 2020/12/02 19:44:33 by ngragas          ###   ########.fr       */
+/*   Updated: 2020/12/02 19:50:39 by ngragas          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,11 +17,6 @@ int	get_next_line(int fd, char **line)
 	static t_buf	buf[MAX_FDS];
 	char			*newline;
 
-	if (BUFFER_SIZE <= 0)
-	{
-		*line = NULL;
-		return (-1);
-	}
 	if (buf[fd].s && (newline = ft_memchr(buf[fd].cur, '\n', buf[fd].max)))
 	{
 		*line = ft_substr(buf[fd].cur, 0, newline - buf[fd].cur);
