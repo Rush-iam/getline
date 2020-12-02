@@ -6,7 +6,7 @@
 /*   By: ngragas <ngragas@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/30 16:55:41 by ngragas           #+#    #+#             */
-/*   Updated: 2020/12/01 21:43:30 by ngragas          ###   ########.fr       */
+/*   Updated: 2020/12/02 18:12:39 by ngragas          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,7 @@
 # define BIG_BUF 524288
 
 # ifndef BUFFER_SIZE
-#  define BUFFER_SIZE 10
+#  define BUFFER_SIZE 65536
 # endif
 
 typedef struct	s_buf
@@ -28,10 +28,12 @@ typedef struct	s_buf
 	char		*s;
 	char		*cur;
 	unsigned	max;
+	unsigned	cap;
 }				t_buf;
 
 int				get_next_line(int fd, char **line);
-int				fetch_fd(int fd, char **line, t_buf *buf, char *newline);
+int				gnl_fetch_fd(int fd, char **line, t_buf *buf, char *newline);
+int				gnl_buf_realloc(int fd, t_buf *buf);
 int				gnl_fail(char **line, t_buf *buf);
 
 void			*ft_memchr(const void *s, int c, size_t n);

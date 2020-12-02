@@ -6,7 +6,7 @@
 /*   By: ngragas <ngragas@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/30 16:59:26 by ngragas           #+#    #+#             */
-/*   Updated: 2020/12/01 21:43:30 by ngragas          ###   ########.fr       */
+/*   Updated: 2020/12/02 17:43:37 by ngragas          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,33 +33,33 @@ int	get_next_line(int fd, char **line)
 	if (!buf[fd].s)
 	{
 		if (BIG_BUF > BUFFER_SIZE)
-			buf[fd].s = malloc(BIG_BUF);
+			buf[fd].cap = BIG_BUF;
 		else
-			buf[fd].s = malloc(BUFFER_SIZE);
+			buf[fd].cap = BUFFER_SIZE;
+		buf[fd].s = malloc(buf[fd].cap);
 		if (!buf[fd].s)
 			return (gnl_fail(line, buf));
 		buf[fd].cur = buf[fd].s;
 		buf[fd].max = 0;
 	}
-	return (fetch_fd(fd, line, buf, newline));
+	return (gnl_fetch_fd(fd, line, buf, newline));
 }
 
-int	fetch_fd(int fd, char **line, t_buf *buf, char *newline)
+int	gnl_fetch_fd(int fd, char **line, t_buf *buf, char *newline)
 {
 	ssize_t	bytes_read;
 
 	while (1)
 	{
-		if (buf[fd].cur + buf[fd].max + BUFFER_SIZE - buf[fd].s > BIG_BUF)
-		{
-			ft_memcpy(buf[fd].s, buf[fd].cur, buf[fd].max);
-			buf[fd].cur = buf[fd].s;
-		}
+		if (buf[fd].cur + buf[fd].max + BUFFER_SIZE - buf[fd].s > buf[fd].cap)
+			if (gnl_buf_realloc(fd, buf) == -1)
+				return (gnl_fail(line, buf));
 		if ((bytes_read = read(fd, buf[fd].cur + buf[fd].max, BUFFER_SIZE)) < 1)
 		{
 			*line = bytes_read ? NULL : ft_substr(buf[fd].cur, 0, buf[fd].max);
 			free(buf[fd].s);
 			buf[fd].s = NULL;
+			buf[fd].cur = NULL;
 			return (bytes_read);
 		}
 		if ((newline = ft_memchr(buf[fd].cur + buf[fd].max, '\n', bytes_read)))
@@ -71,6 +71,25 @@ int	fetch_fd(int fd, char **line, t_buf *buf, char *newline)
 		}
 		buf[fd].max += bytes_read;
 	}
+}
+
+int	gnl_buf_realloc(int fd, t_buf *buf)
+{
+	char	*newbuf;
+
+	if (buf[fd].max + BUFFER_SIZE > buf[fd].cap)
+	{
+		buf[fd].cap *= 4;
+		if (!(newbuf = malloc(buf[fd].cap)))
+			return (-1);
+		ft_memcpy(newbuf, buf[fd].cur, buf[fd].max);
+		free(buf[fd].s);
+		buf[fd].s = newbuf;
+	}
+	else
+		ft_memcpy(buf[fd].s, buf[fd].cur, buf[fd].max);
+	buf[fd].cur = buf[fd].s;
+	return (1);
 }
 
 int	gnl_fail(char **line, t_buf *buf)
