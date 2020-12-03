@@ -29,7 +29,7 @@ int	get_next_line(int fd, char **line)
 		buf[fd].cap = BIG_BUF > BUFFER_SIZE ? BIG_BUF : BUFFER_SIZE;
 		buf[fd].s = malloc(buf[fd].cap);
 		if (!buf[fd].s)
-			return (gnl_fail(line, buf));
+			return (gnl_fail(fd, line, buf));
 		buf[fd].cur = buf[fd].s;
 		buf[fd].max = 0;
 	}
@@ -44,7 +44,7 @@ int	gnl_fetch_fd(int fd, char **line, t_buf *buf, char *newline)
 	{
 		if (buf[fd].cur + buf[fd].max + BUFFER_SIZE - buf[fd].s > buf[fd].cap)
 			if (gnl_buf_realloc(fd, buf) == -1)
-				return (gnl_fail(line, buf));
+				return (gnl_fail(fd, line, buf));
 		if ((bytes_read = read(fd, buf[fd].cur + buf[fd].max, BUFFER_SIZE)) < 1)
 		{
 			*line = bytes_read ? NULL : ft_substr(buf[fd].cur, 0, buf[fd].max);
@@ -83,21 +83,11 @@ int	gnl_buf_realloc(int fd, t_buf *buf)
 	return (1);
 }
 
-int	gnl_fail(char **line, t_buf *buf)
+int	gnl_fail(int fd, char **line, t_buf *buf)
 {
-	short unsigned	index;
-
-	index = 0;
-	while (index < MAX_FDS)
-	{
-		if (buf[index].s)
-		{
-			free(buf[index].s);
-			buf[index].s = NULL;
-			buf[index].cur = NULL;
-		}
-		index++;
-	}
+	free(buf[fd].s);
+	buf[fd].s = NULL;
+	buf[fd].cur = NULL;
 	*line = NULL;
 	return (-1);
 }
