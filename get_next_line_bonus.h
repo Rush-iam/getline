@@ -37,9 +37,6 @@ typedef struct	s_buf
 }				t_buf;
 
 int				get_next_line(int fd, char **line);
-int				gnl_fetch_fd(int fd, char **line, t_buf *buf, char *newline);
-int				gnl_buf_realloc(int fd, t_buf *buf);
-int				gnl_fail(int fd, char **line, t_buf *buf);
 
 void			*ft_memchr(const void *s, int c, size_t n);
 void			*ft_memcpy(void *dst, const void *src, size_t n);
