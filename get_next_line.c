@@ -6,7 +6,7 @@
 /*   By: ngragas <ngragas@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/30 16:59:26 by ngragas           #+#    #+#             */
-/*   Updated: 2020/12/08 15:12:30 by ngragas          ###   ########.fr       */
+/*   Updated: 2020/12/28 13:41:25 by ngragas          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,8 +15,7 @@
 static int	gnl_fail(int fd, char **line, t_buf *buf)
 {
 	free(buf[fd].s);
-	buf[fd].s = NULL;
-	buf[fd].cur = NULL;
+	buf[fd] = (t_buf){NULL, NULL, 0, 0};
 	*line = NULL;
 	return (-1);
 }
@@ -53,8 +52,7 @@ static int	gnl_fetch_fd(int fd, char **line, t_buf *buf, char *newline)
 		{
 			*line = bytes_read ? NULL : ft_substr(buf[fd].cur, 0, buf[fd].max);
 			free(buf[fd].s);
-			buf[fd].s = NULL;
-			buf[fd].cur = NULL;
+			buf[fd] = (t_buf){NULL, NULL, 0, 0};
 			return (bytes_read);
 		}
 		if ((newline = ft_memchr(buf[fd].cur + buf[fd].max, '\n', bytes_read)))
