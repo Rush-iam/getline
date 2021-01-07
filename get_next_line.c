@@ -6,7 +6,7 @@
 /*   By: ngragas <ngragas@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/30 16:59:26 by ngragas           #+#    #+#             */
-/*   Updated: 2020/12/28 19:55:54 by ngragas          ###   ########.fr       */
+/*   Updated: 2021/01/07 13:45:02 by ngragas          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,7 +53,7 @@ static int	gnl_fetch_fd(int fd, char **line, t_buf *buf)
 	while (1)
 	{
 		if (buf[fd].cur + buf[fd].max + BUFFER_SIZE - buf[fd].s > buf[fd].cap)
-			if (!(gnl_buf_realloc(fd, buf)))
+			if (!gnl_buf_realloc(fd, buf))
 				return (gnl_terminate(-1, fd, line, buf));
 		bytes_read = read(fd, buf[fd].cur + buf[fd].max, BUFFER_SIZE);
 		if (bytes_read < 1)
