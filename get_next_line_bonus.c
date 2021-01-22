@@ -6,7 +6,7 @@
 /*   By: ngragas <ngragas@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/02 20:34:29 by ngragas           #+#    #+#             */
-/*   Updated: 2020/12/02 20:35:15 by ngragas          ###   ########.fr       */
+/*   Updated: 2021/01/22 21:23:41 by ngragas          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,7 @@ static int	gnl_terminate(int return_value, int fd, char **line, t_buf *buf)
 		*line = NULL;
 	else if (!(*line = ft_substr(buf[fd].cur, 0, buf[fd].max)))
 		return_value = -1;
-	if (fd >= 0)
+	if (0 <= fd && fs < MAX_FDS)
 	{
 		free(buf[fd].s);
 		buf[fd] = (t_buf){NULL, NULL, 0, 0};
@@ -76,7 +76,7 @@ int			get_next_line(int fd, char **line)
 	static t_buf	buf[MAX_FDS];
 	char			*newline;
 
-	if (fd < 0)
+	if (fd < 0 || fd >= MAX_FDS)
 		return (gnl_terminate(-1, fd, line, buf));
 	if (!buf[fd].s)
 	{
